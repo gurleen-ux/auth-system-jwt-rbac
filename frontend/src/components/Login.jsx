@@ -43,7 +43,7 @@ const Login = () => {
         
         setLoading(true);
         const result = await login(formData.email, formData.password);
-        setLoading(false);
+        setIsLoading(false);
         
         if (result.success) {
             navigate('/dashboard');

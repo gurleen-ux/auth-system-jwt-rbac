@@ -55,7 +55,7 @@ const Register = () => {
             formData.password,
             formData.role
         );
-        setLoading(false);
+        setIsLoading(false);
         
         if (result.success) {
             setTimeout(() => {

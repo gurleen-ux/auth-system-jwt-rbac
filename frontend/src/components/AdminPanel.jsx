@@ -19,7 +19,7 @@ const AdminPanel = () => {
         } catch (err) {
             setError(err.response?.data?.message || 'Access denied');
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 

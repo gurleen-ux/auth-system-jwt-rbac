@@ -5,23 +5,20 @@ import axios from 'axios';
 const Dashboard = () => {
     const { user, logout } = useAuth();
     const [dashboardData, setDashboardData] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
 
     useEffect(() => {
+        const fetchDashboard = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/protected/dashboard');
+                setDashboardData(res.data);
+            } catch (err) {
+                console.error('Error fetching dashboard:', err);
+            }
+        };
+        
         fetchDashboard();
     }, []);
-
-    const fetchDashboard = async () => {
-        try {
-            const res = await axios.get('http://localhost:5000/api/protected/dashboard');
-            setDashboardData(res.data);
-        } catch (err) {
-            console.error('Error fetching dashboard:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleLogout = () => {
         logout();
@@ -71,7 +68,6 @@ const Dashboard = () => {
                     </p>
                 </div>
 
-                {/* Stats Cards */}
                 <div style={styles.statsGrid}>
                     <div style={styles.statCard}>
                         <div style={styles.statIcon}>📊</div>
@@ -96,9 +92,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Two Column Layout */}
                 <div style={styles.twoColumn}>
-                    {/* Profile Section */}
                     <div style={styles.profileCard}>
                         <div style={styles.cardHeader}>
                             <span style={styles.cardIcon}>👤</span>
@@ -126,7 +120,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Activity Section */}
                     <div style={styles.activityCard}>
                         <div style={styles.cardHeader}>
                             <span style={styles.cardIcon}>📈</span>
@@ -147,60 +140,9 @@ const Dashboard = () => {
                                     <span style={styles.activityTime}>Current session</span>
                                 </div>
                             </div>
-                            <div style={styles.activityItem}>
-                                <div style={styles.activityIcon}>🛡️</div>
-                                <div style={styles.activityContent}>
-                                    <p style={styles.activityText}>Protected route accessed</p>
-                                    <span style={styles.activityTime}>Active</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
-
-                {/* Security Section */}
-                <div style={styles.securityCard}>
-                    <div style={styles.cardHeader}>
-                        <span style={styles.cardIcon}>🔒</span>
-                        <h3 style={styles.cardTitle}>Security Status</h3>
-                    </div>
-                    <div style={styles.securityGrid}>
-                        <div style={styles.securityItem}>
-                            <div style={styles.securityIcon}>✅</div>
-                            <div>
-                                <p style={styles.securityText}>Authentication Method</p>
-                                <small style={styles.securitySubtext}>JWT Token Based</small>
-                            </div>
-                        </div>
-                        <div style={styles.securityItem}>
-                            <div style={styles.securityIcon}>🔐</div>
-                            <div>
-                                <p style={styles.securityText}>Encryption</p>
-                                <small style={styles.securitySubtext}>BCrypt + JWT</small>
-                            </div>
-                        </div>
-                        <div style={styles.securityItem}>
-                            <div style={styles.securityIcon}>🛡️</div>
-                            <div>
-                                <p style={styles.securityText}>Session Type</p>
-                                <small style={styles.securitySubtext}>Stateless</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* API Status */}
-                {dashboardData && (
-                    <div style={styles.apiCard}>
-                        <div style={styles.cardHeader}>
-                            <span style={styles.cardIcon}>🌐</span>
-                            <h3 style={styles.cardTitle}>API Response</h3>
-                        </div>
-                        <pre style={styles.apiResponse}>
-                            {JSON.stringify(dashboardData, null, 2)}
-                        </pre>
-                    </div>
-                )}
             </div>
         </div>
     );
@@ -297,7 +239,6 @@ const styles = {
         boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
         overflow: 'hidden',
         minWidth: '150px',
-        animation: 'fadeIn 0.2s ease-out',
     },
     dropdownItem: {
         width: '100%',
@@ -310,7 +251,6 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
-        transition: 'background 0.2s ease',
     },
     mainContent: {
         maxWidth: '1400px',
@@ -319,7 +259,6 @@ const styles = {
     },
     welcomeSection: {
         marginBottom: '40px',
-        animation: 'fadeIn 0.5s ease-out',
     },
     welcomeTitle: {
         fontSize: '36px',
@@ -350,7 +289,6 @@ const styles = {
         alignItems: 'center',
         gap: '20px',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     },
     statIcon: {
         fontSize: '48px',
@@ -452,7 +390,6 @@ const styles = {
         padding: '10px',
         borderRadius: '12px',
         background: '#f8f9fa',
-        transition: 'transform 0.2s ease',
     },
     activityIcon: {
         fontSize: '24px',
@@ -469,87 +406,6 @@ const styles = {
         fontSize: '11px',
         color: '#999',
     },
-    securityCard: {
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '16px',
-        padding: '25px',
-        marginBottom: '40px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-    },
-    securityGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '20px',
-    },
-    securityItem: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-        padding: '15px',
-        borderRadius: '12px',
-        background: '#f8f9fa',
-    },
-    securityIcon: {
-        fontSize: '28px',
-    },
-    securityText: {
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: '4px',
-    },
-    securitySubtext: {
-        fontSize: '12px',
-        color: '#999',
-    },
-    apiCard: {
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '16px',
-        padding: '25px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-    },
-    apiResponse: {
-        background: '#2d3748',
-        color: '#e2e8f0',
-        padding: '20px',
-        borderRadius: '12px',
-        overflowX: 'auto',
-        fontSize: '13px',
-        fontFamily: 'monospace',
-    },
 };
-
-// Add animations
-const styleSheet = document.createElement("style");
-styleSheet.textContent = `
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .stat-card:hover, .profile-card:hover, .activity-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-    
-    button:hover {
-        background: #f0f0f0;
-    }
-    
-    .user-avatar:hover {
-        transform: scale(1.05);
-    }
-    
-    .activity-item:hover {
-        transform: translateX(5px);
-    }
-`;
-document.head.appendChild(styleSheet);
 
 export default Dashboard;

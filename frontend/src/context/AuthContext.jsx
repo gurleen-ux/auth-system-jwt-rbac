@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             loadUser(token);
         } else {
-            setLoading(false);
+            setIsLoading(false);
         }
     }, []);
 
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem('token');
             delete axios.defaults.headers.common['x-auth-token'];
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 

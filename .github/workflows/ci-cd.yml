@@ -26,12 +26,12 @@ jobs:
       - name: Backend dependency check
         run: |
           cd backend
-          npm install  # Changed from npm ci to npm install
+          npm install
 
       - name: Frontend build test
         run: |
           cd frontend
-          npm install  # Changed from npm ci to npm install
+          npm install
           npm run build
 
   build-and-push-docker:

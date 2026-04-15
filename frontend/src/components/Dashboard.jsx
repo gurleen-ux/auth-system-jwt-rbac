@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
 const Dashboard = () => {
     const { user, logout } = useAuth();
-    const [dashboardData, setDashboardData] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [showDropdown, setShowDropdown] = React.useState(false);
 
     useEffect(() => {
         const fetchDashboard = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/protected/dashboard');
-                setDashboardData(res.data);
+                await axios.get('http://localhost:5000/api/protected/dashboard');
+                // API call successful
             } catch (err) {
                 console.error('Error fetching dashboard:', err);
             }

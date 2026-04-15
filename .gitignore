@@ -1,0 +1,35 @@
+# Create .gitignore file
+@"
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+
+# Lock files (optional)
+package-lock.json
+backend/package-lock.json
+frontend/package-lock.json
+
+# Build files
+build/
+dist/
+backend/build/
+frontend/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+"@ | Out-File -FilePath .gitignore -Encoding utf8
